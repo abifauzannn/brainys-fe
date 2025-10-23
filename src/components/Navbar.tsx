@@ -1,63 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import logo from "@/assets/newlogo.png";
-import api from "@/services/api"; // import axios instance
 import { IoSparklesOutline } from "react-icons/io5";
 import { PiCreditCard, PiSignOut } from "react-icons/pi";
 import { AiOutlineHistory } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
-
-interface User {
-  name: string;
-  profession?: string;
-}
-
-interface UserLimit {
-  limit: number;
-  used: number;
-  credit: number;
-  package_name: string;
-}
+import { useUser } from "@/context/UserContext";
 
 export default function Navbar() {
-  const [user, setUser] = useState<User | null>(null);
-  const [userLimit, setUserLimit] = useState<UserLimit>({
-    limit: 0,
-    used: 0,
-    credit: 0,
-    package_name: "Tidak ada paket aktif",
-  });
+  const { user, userLimit } = useUser();
 
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-
-      // pakai axios instance untuk ambil user limit
-      api
-        .get("/user-profile")
-        .then((res) => {
-          const data = res.data?.data ?? {};
-          const credits = data.credits ?? {};
-          const packageData = data.package?.[0] ?? {};
-          setUserLimit({
-            limit: credits.limit ?? 0,
-            used: credits.used ?? 0,
-            credit: credits.credit ?? 0,
-            package_name: packageData.package_name ?? "Tidak ada paket aktif",
-          });
-        })
-        .catch((err) => {
-          console.error("Gagal mengambil user limit:", err);
-        });
-    } else {
-      navigate("/login");
-    }
-  }, [navigate]);
 
   if (!user) return null;
 
@@ -72,9 +27,10 @@ export default function Navbar() {
     return initials;
   };
 
-  const handleLogout = (): void => {
+  const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+
     navigate("/login");
   };
 

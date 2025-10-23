@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import api from "@/services/api";
 import { IoSearchCircle, IoSparklesOutline } from "react-icons/io5";
+import { useUser } from "@/context/UserContext";
 
 interface Option {
   value: string;
@@ -29,6 +30,7 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   onResult,
   onLoadingChange, // ✅ Tambahkan ini
 }) => {
+  const { refreshUserLimit } = useUser(); // ✅ tambahkan ini
   const [name, setName] = useState("");
   const [notes, setNotes] = useState("");
   const [charCount, setCharCount] = useState(0);
@@ -161,7 +163,7 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
       };
 
       const res = await api.post(`${API_URL}/modul-ajar/generate`, payload);
-      console.log("✅ Modul berhasil dibuat:", res.data);
+      await refreshUserLimit();
 
       // ✅ Kirim seluruh data object ke parent
       if (onResult && res.data) {

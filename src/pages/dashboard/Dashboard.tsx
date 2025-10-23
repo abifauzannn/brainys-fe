@@ -10,6 +10,7 @@ import Rubrik from "@/assets/rubrik.png";
 import Surat from "@/assets/surat.png";
 import newBanner from "@/assets/newbanner.png";
 import WhatsappLogo from "@/assets/whatsapp.png";
+import { Link } from "react-router-dom";
 
 type DashboardItem = {
   url: string;
@@ -86,10 +87,6 @@ const dashboardItems: DashboardItem[] = [
 ];
 
 export default function Dashboard() {
-  const handleClick = (url: string) => {
-    if (url) window.location.href = url;
-  };
-
   return (
     <Layout>
       <div className="w-full h-auto mb-3 sm:mb-0 md:mb-3">
@@ -126,13 +123,35 @@ export default function Dashboard() {
               ? "SEGERA"
               : null;
 
+          if (!isDisabled) {
+            return (
+              <Link
+                key={item.title}
+                to={item.url}
+                className="p-4 rounded-lg border border-gray-300 flex flex-col items-start shadow-md hover:bg-slate-50 transition duration-300"
+              >
+                <div className="flex items-center justify-between w-full">
+                  <img src={item.icon} alt={item.title} className="w-10 h-10" />
+                  {badge && (
+                    <span className="bg-[#88F2C8] text-black text-xs font-bold px-2 py-1 rounded-full -mt-5">
+                      {badge}
+                    </span>
+                  )}
+                </div>
+                <div className="w-full py-2 text-left font-bold text-gray-900">
+                  {item.title}
+                </div>
+                <div className="text-xs text-black w-full break-words">
+                  {item.description}
+                </div>
+              </Link>
+            );
+          }
+
           return (
-            <button
+            <div
               key={item.title}
-              onClick={!isDisabled ? () => handleClick(item.url) : undefined}
-              disabled={isDisabled}
-              className={`p-4 rounded-lg border border-gray-300 flex flex-col items-start shadow-md transition duration-300
-                ${!isDisabled ? "hover:bg-slate-50" : "opacity-50"}`}
+              className="p-4 rounded-lg border border-gray-300 flex flex-col items-start shadow-md opacity-50 cursor-not-allowed"
             >
               <div className="flex items-center justify-between w-full">
                 <img src={item.icon} alt={item.title} className="w-10 h-10" />
@@ -145,8 +164,10 @@ export default function Dashboard() {
               <div className="w-full py-2 text-left font-bold text-gray-900">
                 {item.title}
               </div>
-              <div className=" text-xs text-black">{item.description}</div>
-            </button>
+              <div className="text-xs text-black w-full break-words">
+                {item.description}
+              </div>
+            </div>
           );
         })}
       </div>
