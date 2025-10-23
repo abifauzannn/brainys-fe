@@ -1,5 +1,4 @@
 import Layout from "@/layouts/Layout";
-import React from "react";
 import ModulAjar from "@/assets/modulajar.png";
 import Syllabus from "@/assets/syllabus.png";
 import Soal from "@/assets/soal.png";
