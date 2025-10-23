@@ -1,15 +1,34 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import logo from "@/assets/newlogo.png";
+import api from "@/services/api"; // import axios instance
+import { IoSparklesOutline } from "react-icons/io5";
+import { PiCreditCard, PiSignOut } from "react-icons/pi";
+import { AiOutlineHistory } from "react-icons/ai";
+import { FiUser } from "react-icons/fi";
 
 interface User {
   name: string;
   profession?: string;
 }
 
+interface UserLimit {
+  limit: number;
+  used: number;
+  credit: number;
+  package_name: string;
+}
+
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
+  const [userLimit, setUserLimit] = useState<UserLimit>({
+    limit: 0,
+    used: 0,
+    credit: 0,
+    package_name: "Tidak ada paket aktif",
+  });
+
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -17,6 +36,24 @@ export default function Navbar() {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
+
+      // pakai axios instance untuk ambil user limit
+      api
+        .get("/user-profile")
+        .then((res) => {
+          const data = res.data?.data ?? {};
+          const credits = data.credits ?? {};
+          const packageData = data.package?.[0] ?? {};
+          setUserLimit({
+            limit: credits.limit ?? 0,
+            used: credits.used ?? 0,
+            credit: credits.credit ?? 0,
+            package_name: packageData.package_name ?? "Tidak ada paket aktif",
+          });
+        })
+        .catch((err) => {
+          console.error("Gagal mengambil user limit:", err);
+        });
     } else {
       navigate("/login");
     }
@@ -55,6 +92,13 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center space-x-4">
+          <div className="hidden md:flex items-center gap-3 text-xs text-gray-700 mt-1 border border-gray-300 rounded-lg py-1 px-2">
+            <IoSparklesOutline size={20} />
+            <div className="flex flex-col">
+              <span className="font-semibold">{userLimit.package_name}</span>
+              Sisa credit: {userLimit.credit}
+            </div>
+          </div>
           <div className="flex-col items-start hidden md:block">
             <div className="text-gray-900 text-base font-medium font-inter leading-normal">
               {user.name}
@@ -72,62 +116,57 @@ export default function Navbar() {
             <IoIosArrowDown onClick={() => setDropdownOpen(!dropdownOpen)} />
 
             {dropdownOpen && (
-              <div className="absolute right-8 mt-[31px] border bg-white rounded-lg shadow p-3 transform translate-x-1/4 w-48 z-10">
+              <div className="absolute right-8 mt-[31px] border border-gray-300 bg-white rounded-lg shadow p-3 transform translate-x-1/4 w-48 z-10">
                 <ul>
-                  <li
-                    className="flex items-center hover:bg-gray-100 hover:rounded-lg px-1 cursor-pointer"
-                    onClick={() => navigate("/profile")}
-                  >
-                    <img
-                      src="/images/user-circle.png"
-                      alt=""
-                      className="w-[20px] h-[20px]"
-                    />
-                    <span className="block pl-3 py-2 text-[14px] text-slate-500">
-                      Profile Pengguna
-                    </span>
+                  <li className="flex items-center hover:bg-gray-100 hover:rounded-lg px-1 cursor-pointer">
+                    <Link
+                      to="/profile"
+                      className="flex items-center w-full"
+                      onClick={() => setDropdownOpen(false)} // optional: tutup dropdown setelah klik
+                    >
+                      <FiUser size={20} />
+                      <span className="block pl-3 py-2 text-[14px] text-slate-500">
+                        Profile Pengguna
+                      </span>
+                    </Link>
                   </li>
 
-                  <li
-                    className="flex items-center hover:bg-gray-100 hover:rounded-lg px-1 cursor-pointer"
-                    onClick={() => navigate("/history")}
-                  >
-                    <img
-                      src="/images/Union.png"
-                      alt=""
-                      className="w-[18px] h-[20px]"
-                    />
-                    <span className="block pl-3.5 py-2 text-[14px] text-slate-500">
-                      Riwayat
-                    </span>
+                  <li className="flex items-center hover:bg-gray-100 hover:rounded-lg px-1 cursor-pointer">
+                    <Link
+                      to="/history"
+                      className="flex items-center w-full"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <AiOutlineHistory size={20} />
+                      <span className="block pl-3.5 py-2 text-[14px] text-slate-500">
+                        Riwayat
+                      </span>
+                    </Link>
                   </li>
 
-                  <li
-                    className="flex items-center hover:bg-gray-100 hover:rounded-lg px-1 cursor-pointer"
-                    onClick={() => navigate("/langganan")}
-                  >
-                    <img
-                      src="/images/credit-card.png"
-                      alt=""
-                      className="w-[18px] h-[20px]"
-                    />
-                    <span className="block pl-3.5 py-2 text-[14px] text-slate-500">
-                      Langganan
-                    </span>
+                  <li className="flex items-center hover:bg-gray-100 hover:rounded-lg px-1 cursor-pointer">
+                    <Link
+                      to="/langganan"
+                      className="flex items-center w-full"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <PiCreditCard size={20} />
+                      <span className="block pl-3.5 py-2 text-[14px] text-slate-500">
+                        Langganan
+                      </span>
+                    </Link>
                   </li>
 
-                  <li
-                    className="flex items-center hover:bg-gray-100 hover:rounded-lg px-1 cursor-pointer"
-                    onClick={handleLogout}
-                  >
-                    <img
-                      src="/images/sign-out.svg"
-                      alt=""
-                      className="w-[20px] h-[20px]"
-                    />
-                    <span className="block pl-3 py-2 text-[14px] text-slate-500">
-                      Logout
-                    </span>
+                  <li className="flex items-center hover:bg-gray-100 hover:rounded-lg px-1 cursor-pointer">
+                    <button
+                      className="flex items-center w-full"
+                      onClick={handleLogout}
+                    >
+                      <PiSignOut size={20} />
+                      <span className="block pl-3 py-2 text-[14px] text-slate-500">
+                        Logout
+                      </span>
+                    </button>
                   </li>
                 </ul>
               </div>

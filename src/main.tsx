@@ -7,6 +7,7 @@ import Login from "@/pages/auth/Login";
 import Dashboard from "@/pages/dashboard/Dashboard";
 import ProtectedRoute from "@/routes/ProtectedRoute"; // ✅ import ini
 import "./index.css";
+import ModulAjar from "./pages/generate/ModulAjar/ModulAjar";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -20,6 +21,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/generate-modul-ajar"
+          element={
+            <ProtectedRoute>
+              <ModulAjar />
             </ProtectedRoute>
           }
         />
