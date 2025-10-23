@@ -22,11 +22,13 @@ interface ElementResponseItem {
 interface ModulAjarFormProps {
   onResult?: (text: string) => void;
   schoolLevel?: string; // dari session user (untuk enable/disable tombol)
+  onLoadingChange?: (loading: boolean) => void; // ✅ Tambahkan ini
 }
 
 const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   onResult,
   schoolLevel,
+  onLoadingChange, // ✅ Tambahkan ini
 }) => {
   const [name, setName] = useState("");
   const [notes, setNotes] = useState("");
@@ -149,34 +151,34 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    onLoadingChange?.(true);
 
     try {
       const payload = {
         name,
         notes,
-        fase: selectedFase,
-        mata_pelajaran: selectedMapel,
+        phase: selectedFase,
+        subject: selectedMapel,
         element: selectedElement,
-        pekan: selectedPekan,
       };
 
-      const res = await api.post(`${API_URL}/generateModulAjar`, payload);
+      const res = await api.post(`${API_URL}/modul-ajar/generate`, payload);
       console.log("✅ Modul berhasil dibuat:", res.data);
 
-      const hasil = `
-Nama Modul Ajar: ${name}
-Fase: ${selectedFase}
-Mata Pelajaran: ${selectedMapel}
-Elemen: ${selectedElement}
-Pekan: ${selectedPekan}
-Deskripsi: ${notes}
-      `.trim();
-
-      onResult?.(hasil);
+      // ✅ Kirim seluruh data object ke parent
+      if (onResult && res.data) {
+        // Kirim sebagai JSON string atau object
+        onResult(JSON.stringify(res.data.data, null, 2));
+      }
     } catch (error) {
       console.error("❌ Gagal generate modul:", error);
+
+      if (onResult) {
+        onResult("");
+      }
     } finally {
       setLoading(false);
+      onLoadingChange?.(false);
     }
   };
 
@@ -358,12 +360,7 @@ Deskripsi: ${notes}
         ) : (
           <button
             type="submit"
-            disabled={!schoolLevel}
-            className={`h-12 px-6 rounded-lg flex items-center gap-2 ${
-              schoolLevel
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-400 cursor-not-allowed text-white"
-            }`}
+            className="h-12 px-6 rounded-lg flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700"
           >
             <IoSearchCircle size={30} />
             Buat Modul Ajar
