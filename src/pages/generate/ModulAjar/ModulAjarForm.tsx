@@ -27,7 +27,6 @@ interface ModulAjarFormProps {
 
 const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   onResult,
-  schoolLevel,
   onLoadingChange, // ✅ Tambahkan ini
 }) => {
   const [name, setName] = useState("");
@@ -42,7 +41,6 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   const [selectedFase, setSelectedFase] = useState("");
   const [selectedMapel, setSelectedMapel] = useState("");
   const [selectedElement, setSelectedElement] = useState("");
-  const [selectedPekan, setSelectedPekan] = useState("");
 
   const [credit, setCredit] = useState<number | null>(null);
 
@@ -188,7 +186,6 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
     setSelectedFase("");
     setSelectedMapel("");
     setSelectedElement("");
-    setSelectedPekan("");
     setCharCount(0);
   };
 
