@@ -19,10 +19,6 @@ interface ElementResponseItem {
   element: string;
 }
 
-interface PekanResponseItem {
-  pekan: string;
-}
-
 interface ModulAjarFormProps {
   onResult?: (text: string) => void;
   schoolLevel?: string; // dari session user (untuk enable/disable tombol)
@@ -40,7 +36,6 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   const [faseOptions, setFaseOptions] = useState<Option[]>([]);
   const [mapelOptions, setMapelOptions] = useState<Option[]>([]);
   const [elementOptions, setElementOptions] = useState<Option[]>([]);
-  const [pekanOptions, setPekanOptions] = useState<Option[]>([]);
 
   const [selectedFase, setSelectedFase] = useState("");
   const [selectedMapel, setSelectedMapel] = useState("");
