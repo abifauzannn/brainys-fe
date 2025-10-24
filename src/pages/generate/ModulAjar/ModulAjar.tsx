@@ -7,6 +7,7 @@ import ModulAjarOutput from "./ModulAjarOutput";
 export default function ModulAjar() {
   const [hasilGenerate, setHasilGenerate] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [generateId, setGenerateId] = useState<string>(""); // ✅ State untuk ID
 
   return (
     <Layout>
@@ -21,6 +22,7 @@ export default function ModulAjar() {
         <ModulAjarForm
           onResult={setHasilGenerate}
           onLoadingChange={setIsGenerating}
+          onGenerateId={setGenerateId}
         />
         {/* ✅ HASIL OUTPUT */}
         <div className="flex-col justify-start items-start lg:ml-[72px] mt-3 lg:mt-0 flex-1">
@@ -35,7 +37,7 @@ export default function ModulAjar() {
                 Sedang menggenerate modul ajar...
               </div>
             ) : (
-              <ModulAjarOutput data={hasilGenerate} />
+              <ModulAjarOutput data={hasilGenerate} generateId={generateId} />
             )}
           </div>
         </div>

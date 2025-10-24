@@ -33,9 +33,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    console.log("UserContext mounted");
     const storedUser = localStorage.getItem("user");
-    console.log("Stored user:", storedUser);
     if (storedUser) {
       setUser(JSON.parse(storedUser));
       refreshUserLimit();

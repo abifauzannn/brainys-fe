@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import api from "@/services/api";
 import { IoSearchCircle, IoSparklesOutline } from "react-icons/io5";
 import { useUser } from "@/context/UserContext";
+import toast from "react-hot-toast";
 
 interface Option {
   value: string;
@@ -24,11 +25,13 @@ interface ModulAjarFormProps {
   onResult?: (text: string) => void;
   schoolLevel?: string; // dari session user (untuk enable/disable tombol)
   onLoadingChange?: (loading: boolean) => void; // ✅ Tambahkan ini
+  onGenerateId?: (id: string) => void; // ✅ Tambahkan ini
 }
 
 const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   onResult,
   onLoadingChange, // ✅ Tambahkan ini
+  onGenerateId, // ✅ Tambahkan ini
 }) => {
   const { refreshUserLimit } = useUser(); // ✅ tambahkan ini
   const [name, setName] = useState("");
@@ -163,15 +166,38 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
       };
 
       const res = await api.post(`${API_URL}/modul-ajar/generate`, payload);
-      await refreshUserLimit();
 
-      // ✅ Kirim seluruh data object ke parent
-      if (onResult && res.data) {
-        // Kirim sebagai JSON string atau object
-        onResult(JSON.stringify(res.data.data, null, 2));
+      if (res.data.status === "success") {
+        // 🔹 Refresh credit/limit user
+        await refreshUserLimit();
+
+        // 🔹 Kirim hasil ke parent (jika ada)
+        if (onResult && res.data) {
+          onResult(JSON.stringify(res.data.data, null, 2));
+        }
+
+        toast.success(res.data.message || "Modul berhasil dibuat!");
+
+        // 🔹 Kirim generate ID (jika parent membutuhkan)
+        if (onGenerateId && res.data) {
+          const generateId =
+            res.data.id || res.data.data?.id || res.data.generateId;
+          if (generateId) {
+            console.log("✅ Generate ID:", generateId);
+            onGenerateId(String(generateId));
+          } else {
+            console.warn("⚠️ Generate ID tidak ditemukan di response");
+          }
+        }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("❌ Gagal generate modul:", error);
+
+      if (error.response) {
+        // 🔹 Error dari server dengan kode HTTP (misal 401, 403, 500, dst.)
+        const status = error.response.status;
+        toast.error(`Error ${status}`);
+      }
 
       if (onResult) {
         onResult("");

@@ -1,3 +1,4 @@
+import ExportButtonGroup from "@/components/ExportButtonGroup";
 import React from "react";
 
 interface ModulAjarData {
@@ -27,9 +28,13 @@ interface ModulAjarData {
 
 interface ModulAjarOutputProps {
   data: string;
+  generateId?: string; // ✅ Tambahkan prop generateId
 }
 
-const ModulAjarOutput: React.FC<ModulAjarOutputProps> = ({ data }) => {
+const ModulAjarOutput: React.FC<ModulAjarOutputProps> = ({
+  data,
+  generateId,
+}) => {
   if (!data) {
     return (
       <div className="w-full text-gray-700 text-sm font-normal leading-snug  rounded-lg py-4  min-h-[150px]">
@@ -381,6 +386,17 @@ const ModulAjarOutput: React.FC<ModulAjarOutputProps> = ({ data }) => {
                 </ol>
               </div>
             )}
+
+          {generateId && (
+            <div className="flex flex-row gap-3">
+              <ExportButtonGroup
+                generateId={generateId || ""}
+                moduleType="modul-ajar"
+                availableFormats={["word", "excel"]}
+                showGenerateId={true}
+              />
+            </div>
+          )}
         </>
       )}
     </div>
