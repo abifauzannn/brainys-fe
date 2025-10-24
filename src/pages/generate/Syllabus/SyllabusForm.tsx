@@ -18,18 +18,14 @@ interface MataPelajaranResponseItem {
   mata_pelajaran: string;
 }
 
-interface ElementResponseItem {
-  element: string;
-}
-
-interface ModulAjarFormProps {
+interface SyllabusFormProps {
   onResult?: (text: string) => void;
   schoolLevel?: string;
   onLoadingChange?: (loading: boolean) => void;
   onGenerateId?: (id: string) => void;
 }
 
-const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
+const SyllabusForm: React.FC<SyllabusFormProps> = ({
   onResult,
   onLoadingChange,
   onGenerateId,
@@ -42,11 +38,9 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
 
   const [faseOptions, setFaseOptions] = useState<Option[]>([]);
   const [mapelOptions, setMapelOptions] = useState<Option[]>([]);
-  const [elementOptions, setElementOptions] = useState<Option[]>([]);
 
   const [selectedFase, setSelectedFase] = useState<Option | null>(null);
   const [selectedMapel, setSelectedMapel] = useState<Option | null>(null);
-  const [selectedElement, setSelectedElement] = useState<Option | null>(null);
 
   const [credit, setCredit] = useState<number | null>(null);
 
@@ -90,7 +84,7 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   useEffect(() => {
     const fetchCredit = async () => {
       try {
-        const res = await api.get("/module-credit-charges/modul-ajar");
+        const res = await api.get("/module-credit-charges/silabus");
         const creditCharge = res.data.data.credit_charged_generate;
         setCredit(creditCharge);
       } catch (error) {
@@ -100,8 +94,6 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
     fetchCredit();
   }, []);
 
-  // Ambil Fase
-  // ✅ Ambil Fase dengan filter berdasarkan school_level
   useEffect(() => {
     const fetchFase = async () => {
       try {
@@ -183,39 +175,6 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
     fetchMapel();
   }, [selectedFase]);
 
-  // Ambil Element berdasar Mapel & Fase
-  useEffect(() => {
-    if (!selectedMapel || !selectedFase) {
-      setElementOptions([]);
-      return;
-    }
-
-    const fetchElement = async () => {
-      try {
-        const res = await api.post("/capaian-pembelajaran/element", {
-          fase: selectedFase.value,
-          mata_pelajaran: selectedMapel.value,
-        });
-
-        if (res.data.status === "success") {
-          const options = res.data.data.map((item: ElementResponseItem) => ({
-            value: item.element,
-            label: item.element,
-          }));
-          setElementOptions(options);
-        } else {
-          console.warn("Respon tidak success:", res.data);
-          setElementOptions([]);
-        }
-      } catch (error) {
-        console.error("Gagal mengambil data elemen:", error);
-        setElementOptions([]);
-      }
-    };
-
-    fetchElement();
-  }, [selectedMapel, selectedFase]);
-
   // Submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -225,13 +184,12 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
     try {
       const payload = {
         name,
-        notes,
-        phase: selectedFase?.value || "",
+        grade: selectedFase?.value || "",
         subject: selectedMapel?.value || "",
-        element: selectedElement?.value || "",
+        notes,
       };
 
-      const res = await api.post(`${API_URL}/modul-ajar/generate`, payload);
+      const res = await api.post(`${API_URL}/syllabus/generate`, payload);
 
       if (res.data.status === "success") {
         await refreshUserLimit();
@@ -240,7 +198,7 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
           onResult(JSON.stringify(res.data.data, null, 2));
         }
 
-        toast.success(res.data.message || "Modul berhasil dibuat!", {
+        toast.success(res.data.message || "Silabus berhasil dibuat!", {
           duration: 5000,
         });
 
@@ -277,7 +235,6 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
     setNotes("");
     setSelectedFase(null);
     setSelectedMapel(null);
-    setSelectedElement(null);
     setCharCount(0);
   };
 
@@ -290,11 +247,11 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
       {/* Input Nama Modul Ajar */}
       <div className="flex flex-col">
         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          Nama Modul Ajar
+          Nama Silabus
         </label>
         <input
           type="text"
-          placeholder="Masukkan nama modul ajar"
+          placeholder="Masukkan nama silabus"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-gray-300"
@@ -314,7 +271,6 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
             onChange={(option) => {
               setSelectedFase(option);
               setSelectedMapel(null);
-              setSelectedElement(null);
             }}
             options={faseOptions}
             styles={customSelectStyles}
@@ -334,30 +290,11 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
             value={selectedMapel}
             onChange={(option) => {
               setSelectedMapel(option);
-              setSelectedElement(null);
             }}
             options={mapelOptions}
             styles={customSelectStyles}
             placeholder="Pilih Mata Pelajaran"
             isDisabled={!selectedFase}
-            isSearchable
-            noOptionsMessage={() => "Tidak ada data"}
-            className="text-sm"
-          />
-        </div>
-
-        {/* Elemen Capaian */}
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Elemen Capaian
-          </label>
-          <Select
-            value={selectedElement}
-            onChange={(option) => setSelectedElement(option)}
-            options={elementOptions}
-            styles={customSelectStyles}
-            placeholder="Pilih Elemen"
-            isDisabled={!selectedMapel}
             isSearchable
             noOptionsMessage={() => "Tidak ada data"}
             className="text-sm"
@@ -371,11 +308,11 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
           htmlFor="notes"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Deskripsi Modul Ajar
+          Deskripsi Silabus
         </label>
         <textarea
           id="notes"
-          placeholder="Masukan deskripsi point modul ajar"
+          placeholder="Masukan deskripsi silabus"
           value={notes}
           onChange={(e) => {
             setNotes(e.target.value);
@@ -431,7 +368,7 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
             className="h-12 px-6 rounded-lg flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700"
           >
             <IoSearchCircle size={30} />
-            Buat Modul Ajar
+            Buat Silabus
           </button>
         )}
       </div>
@@ -454,4 +391,4 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   );
 };
 
-export default ModulAjarForm;
+export default SyllabusForm;

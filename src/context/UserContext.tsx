@@ -5,6 +5,7 @@ import api from "@/services/api";
 interface User {
   name: string;
   profession?: string;
+  school_level?: string;
 }
 
 interface UserLimit {

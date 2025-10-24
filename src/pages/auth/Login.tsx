@@ -6,8 +6,10 @@ import logo from "@/assets/newlogo.png";
 import google from "@/assets/google.svg";
 import toast from "react-hot-toast";
 import api from "@/services/api";
+import { useUser } from "@/context/UserContext";
 
 export default function Login() {
+  const { setUser, refreshUserLimit } = useUser();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,7 +38,13 @@ export default function Login() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        toast.success("Login berhasil 🎉");
+        setUser(data.user); // ✅ ini kunci
+        await refreshUserLimit();
+
+        toast.success(message, {
+          duration: 5000,
+        });
+
         navigate("/dashboard");
       } else {
         toast.error(message || "Login gagal.");
@@ -61,7 +69,7 @@ export default function Login() {
       </div>
 
       {/* Bagian kanan (form) */}
-      <div className="flex flex-col justify-center items-center w-full md:w-1/2 px-8">
+      <div className="flex flex-col justify-center items-center w-full md:w-1/2 md:px-8">
         {/* Logo */}
         <img src={logo} alt="Logo" className="mb-6 w-36" />
 
