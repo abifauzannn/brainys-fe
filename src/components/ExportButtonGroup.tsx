@@ -8,7 +8,7 @@ type ModuleType =
   | "bahan-ajar"
   | "alur-tujuan-pembelajaran"
   | "asesmen"
-  | "soal";
+  | "exercise-v2";
 
 interface ExportButtonGroupProps {
   generateId: string;
