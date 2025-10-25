@@ -1,10 +1,10 @@
 import Layout from "@/layouts/Layout";
 import PageTitle from "@/components/PageTitle";
 import { useState } from "react";
-import SoalForm from "./SoalForm";
-import SoalOutput from "./SoalOutput";
+import AtpForm from "./AtpForm";
+import BahanAjarOutput from "./AtpOutput";
 
-export default function Soal() {
+export default function Atp() {
   const [hasilGenerate, setHasilGenerate] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generateId, setGenerateId] = useState<string>(""); // ✅ State untuk ID
@@ -12,14 +12,14 @@ export default function Soal() {
   return (
     <Layout>
       <PageTitle
-        title="Templat Latihan Soal"
-        description="Gunakan templat soal kurikulum merdeka"
+        title="Templat Bahan Ajar"
+        description="Gunakan template bahan materi pembelajaran"
         urlBack="/dashboard"
       />
 
       <div className="w-full flex justify-between container mx-auto flex-col lg:flex-row ">
         {/* ✅ FORM */}
-        <SoalForm
+        <AtpForm
           onResult={setHasilGenerate}
           onLoadingChange={setIsGenerating}
           onGenerateId={setGenerateId}
@@ -34,10 +34,10 @@ export default function Soal() {
             {isGenerating ? (
               <div className="w-full text-center  text-gray-700 text-sm  rounded-lg ">
                 <div className="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-2"></div>
-                Sedang menggenerate soal...
+                Sedang menggenerate bahan ajar...
               </div>
             ) : (
-              <SoalOutput data={hasilGenerate} generateId={generateId} />
+              <BahanAjarOutput data={hasilGenerate} generateId={generateId} />
             )}
           </div>
         </div>

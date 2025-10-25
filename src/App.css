@@ -4,6 +4,14 @@
 @import "@fontsource/inter/600.css";
 @import "@fontsource/inter/700.css";
 
+html,
 body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer */
   font-family: "Inter", sans-serif;
+}
+
+/* Untuk Chrome, Edge, Safari */
+html::-webkit-scrollbar {
+  display: none;
 }

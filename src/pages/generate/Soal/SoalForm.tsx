@@ -36,7 +36,7 @@ const SoalForm: React.FC<SoalFormProps> = ({
 }) => {
   const { refreshUserLimit, user } = useUser();
   const [name, setName] = useState("");
-  const [numberOfQuestion, setNumberOfQuestion] = useState("");
+  const [numberOfQuestion, setNumberOfQuestion] = useState<number | "">("");
   const [notes, setNotes] = useState("");
   const [charCount, setCharCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -307,6 +307,27 @@ const SoalForm: React.FC<SoalFormProps> = ({
     setCharCount(0);
   };
 
+  function handleNumberChange(e: React.ChangeEvent<HTMLInputElement>) {
+    let value = e.target.value;
+
+    // Cegah input karakter non-angka
+    value = value.replace(/[^0-9]/g, "");
+
+    // Konversi ke number
+    const num = parseInt(value, 10);
+
+    // Batasi ke maksimal 15
+    if (!isNaN(num)) {
+      if (num > 15) {
+        setNumberOfQuestion(15);
+      } else {
+        setNumberOfQuestion(num);
+      }
+    } else {
+      setNumberOfQuestion("");
+    }
+  }
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -417,12 +438,13 @@ const SoalForm: React.FC<SoalFormProps> = ({
           Jumlah Soal
         </label>
         <input
-          type="number"
-          placeholder="Masukkan nama latihan soal"
+          type="text" // ubah ke text biar bisa kontrol karakter sendiri
+          inputMode="numeric" // tetap munculkan keyboard angka di mobile
+          pattern="[0-9]*"
+          placeholder="Masukkan jumlah soal"
           value={numberOfQuestion}
-          onChange={(e) => setNumberOfQuestion(e.target.value)}
+          onChange={handleNumberChange}
           className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-gray-300"
-          required
         />
         <p className="block mt-2 text-xs font-medium text-gray-500 dark:text-white">
           Maksimal 15 Soal
@@ -496,7 +518,7 @@ const SoalForm: React.FC<SoalFormProps> = ({
             className="h-12 px-6 rounded-lg flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700"
           >
             <IoSearchCircle size={30} />
-            Buat Modul Ajar
+            Buat Soal
           </button>
         )}
       </div>

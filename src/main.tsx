@@ -10,6 +10,9 @@ import ProtectedRoute from "@/routes/ProtectedRoute";
 import { UserProvider } from "@/context/UserContext"; // ✅
 import Syllabus from "./pages/generate/Syllabus/Syllabus";
 import Soal from "./pages/generate/Soal/Soal";
+import NotFound from "./pages/NotFound";
+import Atp from "./pages/generate/Atp/Atp";
+import Gamifikasi from "./pages/generate/Gamifikasi/Gamifikasi";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -48,6 +51,30 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             element={
               <ProtectedRoute>
                 <Soal />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/generate-bahan-ajar"
+            element={
+              <ProtectedRoute>
+                <Atp />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/generate-gamifikasi"
+            element={
+              <ProtectedRoute>
+                <Gamifikasi />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <NotFound />
               </ProtectedRoute>
             }
           />
