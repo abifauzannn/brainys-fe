@@ -19,6 +19,10 @@ export default function Login() {
   const togglePassword = () => setShowPassword(!showPassword);
 
   useEffect(() => {
+    document.title = "Login | Brainys"; // ✅ ubah title tab browser
+  }, []);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       navigate("/dashboard");
