@@ -10,7 +10,7 @@ export default function ModulAjar() {
   const [generateId, setGenerateId] = useState<string>(""); // ✅ State untuk ID
 
   return (
-    <Layout>
+    <Layout title="Templat Modul Ajar">
       <PageTitle
         title="Templat Modul Ajar"
         description="Gunakan template modul ajar kurikulum merdeka"

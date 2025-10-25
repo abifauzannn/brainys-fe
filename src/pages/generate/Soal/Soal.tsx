@@ -10,7 +10,7 @@ export default function Soal() {
   const [generateId, setGenerateId] = useState<string>(""); // ✅ State untuk ID
 
   return (
-    <Layout>
+    <Layout title="Templat Soal">
       <PageTitle
         title="Templat Latihan Soal"
         description="Gunakan templat soal kurikulum merdeka"

@@ -1,11 +1,16 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
+import { useEffect } from "react";
 
 interface Props {
   children: React.ReactNode;
+  title?: string;
 }
 
-export default function Layout({ children }: Props) {
+export default function Layout({ title, children }: Props) {
+  useEffect(() => {
+    document.title = title ? `${title} | Brainys` : "Brainys";
+  }, [title]);
   return (
     <div className="min-h-screen bg-white">
       <Navbar />

@@ -10,7 +10,7 @@ export default function Atp() {
   const [generateId, setGenerateId] = useState<string>(""); // ✅ State untuk ID
 
   return (
-    <Layout>
+    <Layout title="Templat Bahan Ajar">
       <PageTitle
         title="Templat Bahan Ajar"
         description="Gunakan template bahan materi pembelajaran"

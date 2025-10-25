@@ -10,7 +10,7 @@ export default function Syllabus() {
   const [generateId, setGenerateId] = useState<string>(""); // ✅ State untuk ID
 
   return (
-    <Layout>
+    <Layout title="Templat Silabus">
       <PageTitle
         title="Templat Silabus"
         description="Gunakan template Silabus kurikulum merdeka"

@@ -10,7 +10,7 @@ export default function Gamifikasi() {
   const [generateId, setGenerateId] = useState<string>(""); // ✅ State untuk ID
 
   return (
-    <Layout>
+    <Layout title="Templat Materi Gamifikasi">
       <PageTitle
         title="Templat Materi Gamifikasi"
         description="Gunakan template materi berbasis gamifikasi"

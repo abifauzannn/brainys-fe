@@ -88,7 +88,7 @@ const dashboardItems: DashboardItem[] = [
 
 export default function Dashboard() {
   return (
-    <Layout>
+    <Layout title="Dashboard">
       <div className="w-full h-auto mb-3 sm:mb-0 md:mb-3">
         {/* Banner untuk layar lg */}
         <img
