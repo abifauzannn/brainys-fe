@@ -9,6 +9,7 @@ import ModulAjar from "@/pages/generate/ModulAjar/ModulAjar";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import { UserProvider } from "@/context/UserContext"; // ✅
 import Syllabus from "./pages/generate/Syllabus/Syllabus";
+import Soal from "./pages/generate/Soal/Soal";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -39,6 +40,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             element={
               <ProtectedRoute>
                 <Syllabus />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/generate-soal"
+            element={
+              <ProtectedRoute>
+                <Soal />
               </ProtectedRoute>
             }
           />

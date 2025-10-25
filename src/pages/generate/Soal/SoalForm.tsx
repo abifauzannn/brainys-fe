@@ -22,20 +22,21 @@ interface ElementResponseItem {
   element: string;
 }
 
-interface ModulAjarFormProps {
+interface SoalFormProps {
   onResult?: (text: string) => void;
   schoolLevel?: string;
   onLoadingChange?: (loading: boolean) => void;
   onGenerateId?: (id: string) => void;
 }
 
-const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
+const SoalForm: React.FC<SoalFormProps> = ({
   onResult,
   onLoadingChange,
   onGenerateId,
 }) => {
   const { refreshUserLimit, user } = useUser();
   const [name, setName] = useState("");
+  const [numberOfQuestion, setNumberOfQuestion] = useState("");
   const [notes, setNotes] = useState("");
   const [charCount, setCharCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -47,6 +48,7 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   const [selectedFase, setSelectedFase] = useState<Option | null>(null);
   const [selectedMapel, setSelectedMapel] = useState<Option | null>(null);
   const [selectedElement, setSelectedElement] = useState<Option | null>(null);
+  const [selectedTipeSoal, setSelectedTipeSoal] = useState<Option | null>(null);
 
   const [credit, setCredit] = useState<number | null>(null);
 
@@ -54,6 +56,11 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
     import.meta.env.VITE_API_URL || "https://be.brainys.oasys.id/api";
 
   const sessionLevel = user?.school_level?.toLowerCase() || "";
+
+  const tipeSoalOptions: Option[] = [
+    { value: "essay", label: "Essay" },
+    { value: "multiple_choice", label: "Pilihan Ganda" },
+  ];
 
   // Custom styles untuk react-select
   const customSelectStyles = {
@@ -229,29 +236,47 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
         phase: selectedFase?.value || "",
         subject: selectedMapel?.value || "",
         element: selectedElement?.value || "",
+        number_of_questions: numberOfQuestion,
       };
 
-      const res = await api.post(`${API_URL}/modul-ajar/generate`, payload);
+      let res;
 
-      if (res.data.status === "success") {
+      switch (selectedTipeSoal?.value) {
+        case "essay":
+          res = await api.post(
+            `${API_URL}/exercise-v2/generate-essay`,
+            payload
+          );
+          break;
+        case "multiple_choice":
+          res = await api.post(
+            `${API_URL}/exercise-v2/generate-choice`,
+            payload
+          );
+          break;
+        default:
+          setLoading(false);
+          onLoadingChange?.(false);
+          return;
+      }
+
+      const { status, message, data } = res.data;
+
+      if (status == "success") {
         await refreshUserLimit();
 
         if (onResult && res.data) {
           onResult(JSON.stringify(res.data.data, null, 2));
         }
 
-        toast.success(res.data.message || "Modul berhasil dibuat!", {
+        toast.success(message, {
           duration: 5000,
         });
 
-        if (onGenerateId && res.data) {
-          const generateId =
-            res.data.id || res.data.data?.id || res.data.generateId;
+        if (onGenerateId && data.id) {
+          const generateId = data.id;
           if (generateId) {
-            console.log("✅ Generate ID:", generateId);
             onGenerateId(String(generateId));
-          } else {
-            console.warn("⚠️ Generate ID tidak ditemukan di response");
           }
         }
       }
@@ -278,6 +303,7 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
     setSelectedFase(null);
     setSelectedMapel(null);
     setSelectedElement(null);
+    setNumberOfQuestion("");
     setCharCount(0);
   };
 
@@ -290,11 +316,11 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
       {/* Input Nama Modul Ajar */}
       <div className="flex flex-col">
         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          Nama Modul Ajar
+          Nama Latihan Soal
         </label>
         <input
           type="text"
-          placeholder="Masukkan nama modul ajar"
+          placeholder="Masukkan nama latihan soal"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-gray-300"
@@ -304,6 +330,24 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
 
       {/* Chain Select */}
       <div className="flex flex-col gap-6">
+        {/* Tipe Soal */}
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Jenis Soal
+          </label>
+          <Select
+            value={selectedTipeSoal}
+            onChange={(option) => setSelectedTipeSoal(option)}
+            options={tipeSoalOptions}
+            styles={customSelectStyles}
+            placeholder="Pilih jenis soal"
+            isSearchable
+            noOptionsMessage={() => "Tidak ada data"}
+            className="text-sm"
+            required
+          />
+        </div>
+
         {/* Fase */}
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -366,6 +410,23 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
             required
           />
         </div>
+      </div>
+
+      <div className="flex flex-col">
+        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Jumlah Soal
+        </label>
+        <input
+          type="number"
+          placeholder="Masukkan nama latihan soal"
+          value={numberOfQuestion}
+          onChange={(e) => setNumberOfQuestion(e.target.value)}
+          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-gray-300"
+          required
+        />
+        <p className="block mt-2 text-xs font-medium text-gray-500 dark:text-white">
+          Maksimal 15 Soal
+        </p>
       </div>
 
       {/* Textarea Deskripsi */}
@@ -458,4 +519,4 @@ const ModulAjarForm: React.FC<ModulAjarFormProps> = ({
   );
 };
 
-export default ModulAjarForm;
+export default SoalForm;

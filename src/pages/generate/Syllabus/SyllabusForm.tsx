@@ -278,6 +278,7 @@ const SyllabusForm: React.FC<SyllabusFormProps> = ({
             isSearchable
             noOptionsMessage={() => "Tidak ada data"}
             className="text-sm"
+            required
           />
         </div>
 
@@ -298,6 +299,7 @@ const SyllabusForm: React.FC<SyllabusFormProps> = ({
             isSearchable
             noOptionsMessage={() => "Tidak ada data"}
             className="text-sm"
+            required
           />
         </div>
       </div>
@@ -311,6 +313,7 @@ const SyllabusForm: React.FC<SyllabusFormProps> = ({
           Deskripsi Silabus
         </label>
         <textarea
+          required
           id="notes"
           placeholder="Masukan deskripsi silabus"
           value={notes}

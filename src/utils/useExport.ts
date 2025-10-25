@@ -9,7 +9,7 @@ type ModuleType =
   | "bahan-ajar"
   | "alur-tujuan-pembelajaran"
   | "asesmen"
-  | "soal";
+  | "exercise-v2";
 
 interface UseExportProps {
   generateId: string;

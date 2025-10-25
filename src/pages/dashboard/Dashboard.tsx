@@ -36,7 +36,7 @@ const dashboardItems: DashboardItem[] = [
     status: "old",
   },
   {
-    url: "/generate-essay",
+    url: "/generate-soal",
     icon: Soal,
     title: "Templat Soal",
     description: "Gunakan templat soal untuk sekolah",
