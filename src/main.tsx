@@ -13,6 +13,7 @@ import Soal from "./pages/generate/Soal/Soal";
 import NotFound from "./pages/NotFound";
 import Atp from "./pages/generate/Atp/Atp";
 import Gamifikasi from "./pages/generate/Gamifikasi/Gamifikasi";
+import Kisi from "./pages/Kisi/Kisi";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -67,6 +68,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             element={
               <ProtectedRoute>
                 <Gamifikasi />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/generate-kisi-kisi"
+            element={
+              <ProtectedRoute>
+                <Kisi />
               </ProtectedRoute>
             }
           />

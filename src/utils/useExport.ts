@@ -11,6 +11,7 @@ type ModuleType =
   | "asesmen"
   | "exercise-v2"
   | "gamification"
+  | "hint"
 
 interface UseExportProps {
   generateId: string;

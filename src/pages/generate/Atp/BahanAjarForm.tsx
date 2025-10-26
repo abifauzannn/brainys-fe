@@ -10,13 +10,13 @@ interface Option {
   label: string;
 }
 
-interface AtpFormProps {
+interface BahanAjarFormProps {
   onResult?: (text: string) => void;
   onLoadingChange?: (loading: boolean) => void;
   onGenerateId?: (id: string) => void;
 }
 
-const AtpForm: React.FC<AtpFormProps> = ({
+const BahanAjarForm: React.FC<BahanAjarFormProps> = ({
   onResult,
   onLoadingChange,
   onGenerateId,
@@ -318,4 +318,4 @@ const AtpForm: React.FC<AtpFormProps> = ({
   );
 };
 
-export default AtpForm;
+export default BahanAjarForm;

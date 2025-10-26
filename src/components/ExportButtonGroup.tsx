@@ -9,7 +9,8 @@ type ModuleType =
   | "alur-tujuan-pembelajaran"
   | "asesmen"
   | "exercise-v2"
-  | "gamification";
+  | "gamification"
+  | "hint";
 
 interface ExportButtonGroupProps {
   generateId: string;

@@ -1,25 +1,27 @@
 import Layout from "@/layouts/Layout";
 import PageTitle from "@/components/PageTitle";
+import ModulAjarForm from "@/pages/generate/ModulAjar/ModulAjarForm";
 import { useState } from "react";
-import BahanAjarForm from "./BahanAjarForm";
-import BahanAjarOutput from "./BahanAjarOutput";
+import ModulAjarOutput from "../generate/ModulAjar/ModulAjarOutput";
+import KisiForm from "./KisiForm";
+import KisiKisiOutput from "./KisiOutput";
 
-export default function Atp() {
+export default function Kisi() {
   const [hasilGenerate, setHasilGenerate] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generateId, setGenerateId] = useState<string>(""); // ✅ State untuk ID
 
   return (
-    <Layout title="Templat Bahan Ajar">
+    <Layout title="Templat Kisi Kisi Soal">
       <PageTitle
-        title="Templat Bahan Ajar"
-        description="Gunakan template bahan materi pembelajaran"
+        title="Templat Kisi Kisi Soal"
+        description="Gunakan template kisi kisi soal dari capaian belajar"
         urlBack="/dashboard"
       />
 
       <div className="w-full flex justify-between container mx-auto flex-col lg:flex-row ">
         {/* ✅ FORM */}
-        <BahanAjarForm
+        <KisiForm
           onResult={setHasilGenerate}
           onLoadingChange={setIsGenerating}
           onGenerateId={setGenerateId}
@@ -34,10 +36,10 @@ export default function Atp() {
             {isGenerating ? (
               <div className="w-full text-center  text-gray-700 text-sm  rounded-lg ">
                 <div className="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-2"></div>
-                Sedang menggenerate bahan ajar...
+                Sedang menggenerate kisi kisi...
               </div>
             ) : (
-              <BahanAjarOutput data={hasilGenerate} generateId={generateId} />
+              <KisiKisiOutput data={hasilGenerate} generateId={generateId} />
             )}
           </div>
         </div>
