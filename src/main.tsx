@@ -11,7 +11,7 @@ import { UserProvider } from "@/context/UserContext"; // ✅
 import Syllabus from "./pages/generate/Syllabus/Syllabus";
 import Soal from "./pages/generate/Soal/Soal";
 import NotFound from "./pages/NotFound";
-import Atp from "./pages/generate/Atp/Atp";
+import Atp from "./pages/generate/BahanAjar/BahanAjar";
 import Gamifikasi from "./pages/generate/Gamifikasi/Gamifikasi";
 import Kisi from "./pages/Kisi/Kisi";
 
