@@ -1,8 +1,6 @@
 import Layout from "@/layouts/Layout";
 import PageTitle from "@/components/PageTitle";
-import ModulAjarForm from "@/pages/generate/ModulAjar/ModulAjarForm";
 import { useState } from "react";
-import ModulAjarOutput from "../generate/ModulAjar/ModulAjarOutput";
 import KisiForm from "./KisiForm";
 import KisiKisiOutput from "./KisiOutput";
 
