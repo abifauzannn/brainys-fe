@@ -32,29 +32,48 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    localStorage.setItem("email", email);
 
     try {
       const response = await api.post("/login", { email, password });
       const { status, data, message } = response.data;
 
       if (status === "success") {
-        // Simpan token dan data user ke localStorage
+        // ✅ Login sukses
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.removeItem("email");
 
-        setUser(data.user); // ✅ ini kunci
+        setUser(data.user);
         await refreshUserLimit();
 
-        toast.success(message, {
-          duration: 5000,
-        });
-
+        toast.success(message || "Login berhasil");
         navigate("/dashboard");
-      } else {
-        toast.error(message || "Login gagal.");
       }
     } catch (error: any) {
-      const msg = error.response?.data?.message || "Terjadi kesalahan server.";
+      const res = error.response?.data;
+      toast.error(res.message);
+      localStorage.removeItem("email");
+
+      // 🟡 Jika belum verifikasi OTP
+      if (res?.message && res.message.includes("verifikasi OTP")) {
+        localStorage.setItem("email", email);
+
+        try {
+          // 🔁 Kirim permintaan resend OTP ke backend Laravel
+          await api.post("/resend-otp", { email });
+
+          toast.success("Kode OTP telah dikirim ke email Anda.");
+        } catch (resendError: any) {
+          toast.error("Gagal mengirim OTP. Silakan coba lagi.");
+        }
+
+        // 🔀 Arahkan ke halaman verifikasi OTP
+        navigate("/verify-otp");
+        return;
+      }
+
+      const msg = res?.message || "Terjadi kesalahan server.";
       toast.error(msg);
     } finally {
       setLoading(false);
