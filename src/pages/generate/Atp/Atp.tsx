@@ -1,8 +1,6 @@
 import Layout from "@/layouts/Layout";
 import PageTitle from "@/components/PageTitle";
 import { useState } from "react";
-import BahanAjarForm from "../BahanAjar/BahanAjarForm";
-import BahanAjarOutput from "../BahanAjar/BahanAjarOutput";
 import AtpForm from "./AtpForm";
 import AtpOutput from "./AtpOutput";
 

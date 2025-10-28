@@ -93,7 +93,7 @@ export default function VerifyOtp() {
         otp: otpValue,
       });
 
-      const { status, message, data } = res.data;
+      const { status, message } = res.data;
 
       if (status === "success") {
         toast.success(message || "OTP berhasil diverifikasi!");
