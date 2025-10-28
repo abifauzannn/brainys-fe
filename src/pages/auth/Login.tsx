@@ -72,9 +72,6 @@ export default function Login() {
         navigate("/verify-otp");
         return;
       }
-
-      const msg = res?.message || "Terjadi kesalahan server.";
-      toast.error(msg);
     } finally {
       setLoading(false);
     }
