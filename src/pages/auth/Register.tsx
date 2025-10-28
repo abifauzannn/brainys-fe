@@ -68,7 +68,6 @@ export default function Register() {
 
       if (status === "success") {
         localStorage.setItem("email", email);
-        console.log(data.user);
         toast.success("Registrasi berhasil! Silakan verifikasi OTP.");
         navigate("/verify-otp");
       } else {

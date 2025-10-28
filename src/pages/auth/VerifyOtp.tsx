@@ -98,7 +98,6 @@ export default function VerifyOtp() {
       if (status === "success") {
         toast.success(message || "OTP berhasil diverifikasi!");
         localStorage.removeItem("email");
-        console.log(data);
       } else {
         toast.error(message || "Verifikasi OTP gagal.");
       }
