@@ -16,6 +16,7 @@ import Gamifikasi from "./pages/generate/Gamifikasi/Gamifikasi";
 import Kisi from "./pages/Kisi/Kisi";
 import Atp from "./pages/generate/Atp/Atp";
 import Register from "./pages/auth/Register";
+import VerifyOtp from "./pages/auth/VerifyOtp";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-otp" element={<VerifyOtp />} />
 
           <Route
             path="/dashboard"
