@@ -11,9 +11,11 @@ import { UserProvider } from "@/context/UserContext"; // ✅
 import Syllabus from "./pages/generate/Syllabus/Syllabus";
 import Soal from "./pages/generate/Soal/Soal";
 import NotFound from "./pages/NotFound";
-import Atp from "./pages/generate/BahanAjar/BahanAjar";
+import BahanAjar from "./pages/generate/BahanAjar/BahanAjar";
 import Gamifikasi from "./pages/generate/Gamifikasi/Gamifikasi";
 import Kisi from "./pages/Kisi/Kisi";
+import Atp from "./pages/generate/Atp/Atp";
+import Register from "./pages/auth/Register";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -23,6 +25,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
           <Route
             path="/dashboard"
             element={
@@ -59,7 +63,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             path="/generate-bahan-ajar"
             element={
               <ProtectedRoute>
-                <Atp />
+                <BahanAjar />
               </ProtectedRoute>
             }
           />
@@ -76,6 +80,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             element={
               <ProtectedRoute>
                 <Kisi />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/generate-atp"
+            element={
+              <ProtectedRoute>
+                <Atp />
               </ProtectedRoute>
             }
           />

@@ -12,6 +12,7 @@ type ModuleType =
   | "exercise-v2"
   | "gamification"
   | "hint"
+  | "atp"
 
 interface UseExportProps {
   generateId: string;

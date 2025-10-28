@@ -10,7 +10,8 @@ type ModuleType =
   | "asesmen"
   | "exercise-v2"
   | "gamification"
-  | "hint";
+  | "hint"
+  | "atp";
 
 interface ExportButtonGroupProps {
   generateId: string;
