@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import onboarding from "@/assets/newonboarding.png";
 import logo from "@/assets/newlogo.png";
 import google from "@/assets/google.svg";
 import toast from "react-hot-toast";
 import api from "@/services/api";
-import { useUser } from "@/context/UserContext";
 
 export default function Register() {
   // const { setUser, refreshUserLimit } = useUser();
@@ -63,8 +61,7 @@ export default function Register() {
         password_confirmation: confirmationPassword,
       });
 
-      const { status, data, message } = response.data;
-      console.log("✅ RESPONSE:", response.data);
+      const { status, message } = response.data;
 
       if (status === "success") {
         localStorage.setItem("email", email);
