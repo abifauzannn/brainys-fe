@@ -19,6 +19,8 @@ import Register from "./pages/auth/Register";
 import VerifyOtp from "./pages/auth/VerifyOtp";
 import CompleteProfile from "./pages/auth/CompleteProfile";
 import Profile from "./pages/auth/Profile";
+import EmailVerify from "./pages/auth/change-password/EmailVerify";
+import ChangePassword from "./pages/auth/change-password/ChangePasswordForm";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -44,6 +46,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/email-verify"
+            element={
+              <ProtectedRoute>
+                <EmailVerify />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/change-password"
+            element={
+              <ProtectedRoute>
+                <ChangePassword />
               </ProtectedRoute>
             }
           />

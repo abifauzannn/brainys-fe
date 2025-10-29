@@ -202,7 +202,7 @@ const Profile: React.FC = () => {
           />
         </div>
 
-        <Link to="/profile" className="text-right mb-6">
+        <Link to="/email-verify" className="text-right mb-6">
           <span className="block text-[14px] text-blue-600">
             Ganti Password
           </span>

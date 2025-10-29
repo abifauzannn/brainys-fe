@@ -8,6 +8,7 @@ interface User {
   school_level?: string;
   is_active?: number;
   school_name?: string;
+  email?: string;
 }
 
 interface UserLimit {

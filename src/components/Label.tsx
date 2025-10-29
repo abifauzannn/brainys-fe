@@ -9,7 +9,7 @@ const Label: React.FC<PageTitleProps> = ({ title, htmlFor }) => {
   return (
     <label
       htmlFor={htmlFor ?? ""}
-      className="block mb-2 text-sm font-medium text-gray-900  "
+      className="block mb-1 text-sm font-medium text-gray-900  "
     >
       {title}
     </label>
