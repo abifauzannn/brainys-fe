@@ -6,6 +6,8 @@ interface User {
   name: string;
   profession?: string;
   school_level?: string;
+  is_active?: number;
+  school_name?: string;
 }
 
 interface UserLimit {

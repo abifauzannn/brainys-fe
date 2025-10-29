@@ -53,6 +53,7 @@ export default function Login() {
     } catch (error: any) {
       const res = error.response?.data;
       toast.error(res.message);
+      console.log(res);
       localStorage.removeItem("email");
 
       // 🟡 Jika belum verifikasi OTP

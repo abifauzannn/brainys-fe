@@ -114,7 +114,7 @@ export default function Register() {
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500 placeholder:text-gray-300"
               required
             />
-            <p className="block mt-2 text-xs font-medium text-gray-500 dark:text-white">
+            <p className="block mt-2 text-xs font-medium text-gray-500  ">
               Direkomendasikan menggunakan email{" "}
               <span className="font-bold">belajar.id</span>
             </p>

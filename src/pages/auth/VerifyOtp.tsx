@@ -93,11 +93,13 @@ export default function VerifyOtp() {
         otp: otpValue,
       });
 
-      const { status, message } = res.data;
+      const { status, message, data } = res.data;
 
       if (status === "success") {
         toast.success(message || "OTP berhasil diverifikasi!");
+        localStorage.setItem("token", data.token);
         localStorage.removeItem("email");
+        navigate("/complete-profile");
       } else {
         toast.error(message || "Verifikasi OTP gagal.");
       }
